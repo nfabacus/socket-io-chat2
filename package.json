@@ -1,0 +1,23 @@
+{
+  "name": "socket-io-chat2",
+  "version": "1.0.0",
+  "description": "This is to learn how to implement a chat app using socket.io, express, and mongodb.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nfabacus/socket-io-chat2.git"
+  },
+  "author": "Nobuyuki Fujioka",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nfabacus/socket-io-chat2/issues"
+  },
+  "homepage": "https://github.com/nfabacus/socket-io-chat2#readme",
+  "dependencies": {
+    "express": "^4.14.1",
+    "socket.io": "^1.7.2"
+  }
+}
