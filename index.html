@@ -69,7 +69,7 @@
       $nickBox.val('');
     });
 
-    socket.on('username', function(data){
+    socket.on('usernames', function(data){
       var html = "";
       for(i=0; i < data.length; i++){
         html += data[i] + '<br/>';
@@ -84,7 +84,7 @@
     });
 
     socket.on('new message', function(data){
-      $chat.append(data + "<br/>");
+      $chat.append('<b>'+data.nick + ': </b>' + data.msg + "<br/>");
     });
 
 
