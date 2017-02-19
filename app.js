@@ -2,9 +2,26 @@ var express = require('express'),
     app = express(),
     server = require('http').createServer(app),
     io = require('socket.io').listen(server),
+    mongoose = require('mongoose'),
     users = {};
 
 server.listen(3000);
+
+mongoose.connect('mongodb://localhost/chat', function(err){
+  if(err){
+    console.log(err);
+  } else {
+    console.log('conneted to mongodb!');
+  }
+});
+
+var chatSchema = mongoose.Schema({
+  nick: String,
+  msg: String,
+  created: {type: Date, default: Date.now}
+});
+
+var Chat = mongoose.model('Message', chatSchema); //'Message' is the name of a collection to be created inside the database, with the schema you want to use 'chatSchema'.  It will automatically create a collection called 'Messages'.
 
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
@@ -15,6 +32,11 @@ io.sockets.on('connection', function(socket){
   function updateNicknames(){
     io.sockets.emit('usernames', Object.keys(users));
   }
+  var query = Chat.find({});
+  query.sort('-created').limit(20).exec(function(err, docs){
+    if(err) throw err;
+    socket.emit('load old msgs', docs);
+  });
 
   socket.on('new user', function(data, callback){
     if(data in users){
@@ -46,7 +68,11 @@ io.sockets.on('connection', function(socket){
       }
 
     } else {
-      io.sockets.emit('new message', {msg: msg, nick: socket.nickname});
+      var newMsg = new Chat({msg: msg, nick: socket.nickname});
+      newMsg.save(function(err){
+        if(err) throw err;
+        io.sockets.emit('new message', {msg: msg, nick: socket.nickname});
+      });
     }
 
   });

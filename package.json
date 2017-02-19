@@ -18,6 +18,7 @@
   "homepage": "https://github.com/nfabacus/socket-io-chat2#readme",
   "dependencies": {
     "express": "^4.14.1",
+    "mongoose": "^4.8.3",
     "socket.io": "^1.7.2"
   }
 }

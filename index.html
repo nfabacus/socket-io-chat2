@@ -7,6 +7,7 @@
     #chat {
       height: 300px;
       background-color: Grey;
+      overflow-y: scroll;
     }
     #contentWrap {
       display: none;
@@ -66,6 +67,13 @@
       var $messageForm = $('#send-message');
       var $messageBox = $('#message');
       var $chat = $('#chat');
+      var $chatWrap = $('#chatWrap');
+
+      function scrollToPageButton(){
+        $('#chat').animate({scrollTop:$('#chat').height()}, 1000);
+      }
+
+
 
     $nickForm.submit(function(e){
       e.preventDefault();
@@ -73,6 +81,7 @@
         if(data){
           $('#nickWrap').hide();
           $('#contentWrap').show();
+          scrollToPageButton();
         } else {
           $nickError.html('That username is already taken!  Try again.');
         }
@@ -96,8 +105,20 @@
       $messageBox.val("");
     });
 
-    socket.on('new message', function(data){
+    function displayMsg(data) {
       $chat.append('<span class="msg"><b>'+data.nick + ': </b>' + data.msg + "</span><br/>");
+    };
+
+    socket.on('load old msgs', function(docs){
+      for(var i=docs.length-1; i >=0; i--) {
+        displayMsg(docs[i]);
+      }
+      scrollToPageButton();
+    });
+
+    socket.on('new message', function(data){
+      displayMsg(data);
+      scrollToPageButton();
     });
 
     socket.on('whisper', function(data){
