@@ -4,6 +4,7 @@ var express = require('express'),
     io = require('socket.io').listen(server),
     mongoose = require('mongoose'),
     users = {};
+    //test
 
 server.listen(3000);
 
